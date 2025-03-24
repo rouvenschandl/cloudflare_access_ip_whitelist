@@ -67,7 +67,7 @@ for app_uuid in "${!app_policies[@]}"; do
   }'
 
   # Send the PUT request to update the policy
-  response=$(curl -s -X PUT -H "Content-Type: application/json" -H "X-Auth-Email: YOUR_CLOUDFLARE_EMAIL" -H "X-Auth-Key: ${api_token}" --data "${policy_data}" "${api_url}")
+  response=$(curl -s -X PUT -H "Content-Type: application/json" -H "Authorization: Bearer ${api_token}" --data "${policy_data}" "${api_url}")
 
   # Check if policy update was successful
   if [ "$(echo "${response}" | jq -r '.success')" = "true" ]; then
