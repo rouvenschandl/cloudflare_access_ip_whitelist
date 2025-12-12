@@ -1,3 +1,15 @@
+## 🚀 New Version Available!
+
+**This repository has been archived.**
+
+The script has been completely rewritten in TypeScript with major improvements:  
+- ✨ **Interactive CLI** - no more manual ID hunting!
+- 🔄 **Full support for both legacy and new reusable Access Policies**
+- 📦 **Better error handling and user experience**
+
+**👉 Check out the new version: [rouvenschandl/cloudflare-updater](https://github.com/rouvenschandl/cloudflare-updater)**
+---
+
 **Project Description:**
 
 The goal of this project is to create an automated solution for updating IP whitelisting rules within Cloudflare Access policies using a specially designed script. Cloudflare Access is a security framework that enforces strict access control to applications by permitting only authorized IP addresses. This project streamlines the process of updating these access rules by employing the Cloudflare API to dynamically adjust IP whitelists based on server IP changes. Additionally, the script integrates with Discord to provide instant notifications for policy updates.
