@@ -46,9 +46,16 @@ for app_uuid in "${!app_policies[@]}"; do
   policy_uuid="${app_policies[$app_uuid]}"
   api_url="https://api.cloudflare.com/client/v4/accounts/${account_identifier}/access/apps/${app_uuid}/policies/${policy_uuid}"
 
-  # Policy data to update with current IP addresses
+  # Get existing policy data
+  existing=$(curl -s -X GET -H 'Content-Type: application/json' -H "Authorization: Bearer $api_token" "${api_url}")
+  name=$( jq -r ".result.name" <<< "${existing}" )
+  exclude=$( jq -r ".result.exclude" <<< "${existing}" )
+  require=$( jq -r ".result.require" <<< "${existing}" )
+  precedence=$( jq -r ".result.precedence" <<< "${existing}" )
+
+  # Policy data to update with current IP addresses, and keep all other data as-is
   policy_data='{
-    "name": "IP",
+    "name": "'"${name}"'",
     "decision": "bypass",
     "include": [
       {
@@ -62,12 +69,13 @@ for app_uuid in "${!app_policies[@]}"; do
         }
       }
     ],
-    "exclude": [],
-    "require": []
+    "exclude": '"${exclude}"',
+    "require": '"${require}"',
+    "precedence": '"${precedence}"'
   }'
 
   # Send the PUT request to update the policy
-  response=$(curl -s -X PUT -H "Content-Type: application/json" -H "X-Auth-Email: YOUR_CLOUDFLARE_EMAIL" -H "X-Auth-Key: ${api_token}" --data "${policy_data}" "${api_url}")
+  response=$(curl -s -X PUT -H 'Content-Type: application/json' -H "Authorization: Bearer $api_token" --data "${policy_data}" "${api_url}")
 
   # Check if policy update was successful
   if [ "$(echo "${response}" | jq -r '.success')" = "true" ]; then
